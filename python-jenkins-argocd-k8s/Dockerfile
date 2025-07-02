@@ -3,12 +3,14 @@ FROM python:3.10
 # Set work directory
 WORKDIR /app
 
-# Copy project files
-COPY . .
+# Copy dependency file first for better layer caching
+COPY requirements.txt .
 
 # Install dependencies
-COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy project files
+COPY . .
 
 # Run migrations
 RUN python manage.py migrate
